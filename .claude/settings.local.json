@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "allow": ["Skill(update-config)", "mcp__mui-mcp__useMuiDocs"]
+  }
+}

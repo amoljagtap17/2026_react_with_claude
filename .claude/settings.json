@@ -1,4 +1,5 @@
 {
+  "enabledMcpjsonServers": ["mui-mcp"],
   "env": {
     "DO_NOT_TRACK": "1",
     "NPM_CONFIG_FUND": "false",
