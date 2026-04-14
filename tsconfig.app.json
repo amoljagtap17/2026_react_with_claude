@@ -19,7 +19,18 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Additional */
+    "paths": {
+      "~/*": ["./src/*"],
+      "@features/*": ["./src/features/*"],
+      "@components/*": ["./src/components/*"],
+      "@providers/*": ["./src/providers/*"],
+      "@stores/*": ["./src/stores/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@router/*": ["./src/router/*"]
+    }
   },
   "include": ["src"]
 }
