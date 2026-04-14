@@ -1,0 +1,36 @@
+{
+  "env": {
+    "DO_NOT_TRACK": "1",
+    "NPM_CONFIG_FUND": "false",
+    "NPM_CONFIG_AUDIT": "false",
+    "NPM_CONFIG_UPDATE_NOTIFIER": "false",
+    "VITE_CJS_IGNORE_WARNING": "true"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run prettier:check)",
+      "Bash(npm run prettier:write)",
+      "Edit",
+      "Write",
+      "Read(C:/2026_pocs/2026_react_with_claude/)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(*.env)",
+      "Read(*.pem)",
+      "Read(*.key)",
+      "Read(*.cert)",
+      "Read(*.crt)",
+      "Read(*secret*)",
+      "Read(*credential*)",
+      "Bash(npm install:*)",
+      "Bash(npm install)",
+      "Bash(curl:*)",
+      "WebFetch",
+      "WebSearch",
+      "Read(./dist)"
+    ]
+  }
+}
