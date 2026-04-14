@@ -5,6 +5,7 @@ import { productKeys } from "./keys";
 
 async function fetchProducts(): Promise<Product[]> {
   const { data } = await axiosInstance.get<Product[]>("/products");
+
   return data;
 }
 

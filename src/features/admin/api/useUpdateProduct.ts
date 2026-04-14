@@ -13,11 +13,13 @@ async function updateProduct({
   input,
 }: UpdateProductArgs): Promise<Product> {
   const { data } = await axiosInstance.patch<Product>(`/products/${id}`, input);
+
   return data;
 }
 
 export function useUpdateProduct() {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: updateProduct,
     onSuccess: (_, { id }) => {

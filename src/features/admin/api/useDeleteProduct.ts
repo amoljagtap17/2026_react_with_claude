@@ -8,6 +8,7 @@ async function deleteProduct(id: number): Promise<void> {
 
 export function useDeleteProduct() {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: deleteProduct,
     onSuccess: (_, id) => {

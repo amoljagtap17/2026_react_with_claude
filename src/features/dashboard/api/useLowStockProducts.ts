@@ -8,6 +8,7 @@ async function fetchLowStockProducts(): Promise<Product[]> {
   const { data } = await axiosInstance.get<Product[]>("/products", {
     params: { stock_lte: LOW_STOCK_THRESHOLD },
   });
+
   return data;
 }
 
