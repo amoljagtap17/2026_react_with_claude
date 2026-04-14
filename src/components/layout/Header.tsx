@@ -8,9 +8,17 @@ const NAV_LINKS = [
 
 export function Header() {
   return (
-    <AppBar position="sticky">
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{ borderBottom: "1px solid", borderColor: "divider" }}
+    >
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, letterSpacing: "0.02em" }}
+        >
           Product Catalog
         </Typography>
         <Box sx={{ display: "flex", gap: 1 }}>
@@ -21,9 +29,11 @@ export function Header() {
               component={NavLink}
               to={to}
               sx={{
+                borderRadius: 2,
+                px: 2,
                 "&.active": {
-                  backgroundColor: "rgba(255, 255, 255, 0.15)",
-                  borderRadius: 1,
+                  backgroundColor: "rgba(255, 255, 255, 0.12)",
+                  fontWeight: 600,
                 },
               }}
             >
