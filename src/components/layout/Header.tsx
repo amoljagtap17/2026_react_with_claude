@@ -29,7 +29,6 @@ export function Header() {
               component={NavLink}
               to={to}
               sx={{
-                borderRadius: 2,
                 px: 2,
                 "&.active": {
                   backgroundColor: "rgba(255, 255, 255, 0.12)",

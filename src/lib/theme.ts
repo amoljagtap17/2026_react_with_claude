@@ -32,13 +32,13 @@ export const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 0,
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
+          borderRadius: 0,
           textTransform: "none",
           fontWeight: 500,
         },
@@ -47,7 +47,7 @@ export const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
+          borderRadius: 0,
         },
       },
     },
