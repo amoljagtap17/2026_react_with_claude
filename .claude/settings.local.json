@@ -9,7 +9,8 @@
       "mcp__ag-mcp__list_versions",
       "Bash(npx tsc *)",
       "Bash(npm run *)",
-      "Bash(echo \"Exit: $?\")"
+      "Bash(echo \"Exit: $?\")",
+      "Bash(node -e \"const m = require\\('ag-grid-community'\\); const keys = Object.keys\\(m\\).filter\\(k => /module/i.test\\(k\\)\\); console.log\\(keys.join\\('\\\\n'\\)\\)\")"
     ]
   }
 }

@@ -5,11 +5,23 @@ import {
   PRODUCT_CATEGORIES,
   PRODUCT_CONDITIONS,
 } from "@features/products/schemas/product.schema";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
-import type { ColDef, ValueFormatterParams } from "ag-grid-community";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import { useUiStore } from "@stores/uiStore";
+import type {
+  ColDef,
+  SelectionChangedEvent,
+  ValueFormatterParams,
+} from "ag-grid-community";
 import { SelectEditorModule } from "ag-grid-community";
 import { RowGroupingModule, TreeDataModule } from "ag-grid-enterprise";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useDeleteProduct } from "../../api/useDeleteProduct";
+import { ProductDrawer } from "../ProductDrawer";
 
 const ADDITIONAL_MODULES = [
   SelectEditorModule,
@@ -28,6 +40,19 @@ const boolFormatter = (params: ValueFormatterParams<Product, boolean>) =>
 
 export function AdminGrid() {
   const { data, isPending } = useProducts();
+  const [selectedRows, setSelectedRows] = useState<Product[]>([]);
+
+  const {
+    isDrawerOpen,
+    drawerMode,
+    openAddDrawer,
+    openUpdateDrawer,
+    closeDrawer,
+  } = useUiStore();
+
+  const { mutate: deleteProduct } = useDeleteProduct();
+
+  const editingProduct = drawerMode === "update" ? selectedRows[0] : undefined;
 
   const columnDefs = useMemo<ColDef<Product>[]>(
     () => [
@@ -39,12 +64,12 @@ export function AdminGrid() {
       {
         field: "name",
         headerName: "Name",
-        editable: true,
+        editable: params => !!params.node.isSelected(),
       },
       {
         field: "category",
         headerName: "Category",
-        editable: true,
+        editable: params => !!params.node.isSelected(),
         cellEditor: "agSelectCellEditor",
         cellEditorParams: { values: PRODUCT_CATEGORIES },
         rowGroup: true,
@@ -53,7 +78,7 @@ export function AdminGrid() {
       {
         field: "price",
         headerName: "Price",
-        editable: true,
+        editable: params => !!params.node.isSelected(),
         cellEditor: "agNumberCellEditor",
         cellEditorParams: { min: 0, precision: 2 },
         valueFormatter: priceFormatter,
@@ -61,14 +86,14 @@ export function AdminGrid() {
       {
         field: "stock",
         headerName: "Stock",
-        editable: true,
+        editable: params => !!params.node.isSelected(),
         cellEditor: "agNumberCellEditor",
         cellEditorParams: { min: 0 },
       },
       {
         field: "condition",
         headerName: "Condition",
-        editable: true,
+        editable: params => !!params.node.isSelected(),
         cellEditor: "agSelectCellEditor",
         cellEditorParams: { values: PRODUCT_CONDITIONS },
       },
@@ -81,7 +106,7 @@ export function AdminGrid() {
       {
         field: "description",
         headerName: "Description",
-        editable: true,
+        editable: params => !!params.node.isSelected(),
         tooltipField: "description",
       },
       {
@@ -95,6 +120,23 @@ export function AdminGrid() {
     []
   );
 
+  const handleSelectionChanged = useCallback(
+    (event: SelectionChangedEvent<Product>) => {
+      setSelectedRows(event.api.getSelectedRows());
+      // Re-evaluate editable callbacks for all visible cells
+      event.api.refreshCells({ force: true });
+    },
+    []
+  );
+
+  const handleDelete = () => {
+    selectedRows.forEach(row => deleteProduct(row.id));
+    setSelectedRows([]);
+  };
+
+  const canUpdate = selectedRows.length === 1;
+  const canDelete = selectedRows.length > 0;
+
   return (
     <Box
       sx={{
@@ -102,25 +144,75 @@ export function AdminGrid() {
         display: "flex",
         flexDirection: "column",
         p: 2,
+        gap: 1,
         overflow: "hidden",
       }}
     >
-      <AgGrid<Product>
-        columnDefs={columnDefs}
-        rowData={data ?? null}
-        loading={isPending}
-        pagination={true}
-        pageSize={20}
-        pageSizeOptions={[10, 20, 50, 100]}
-        additionalModules={ADDITIONAL_MODULES}
-        noRowsMessage="No products found"
-        getRowId={params => String(params.data.id)}
-        groupDisplayType="singleColumn"
-        autoGroupColumnDef={{
-          headerName: "Category",
-          minWidth: 180,
-          cellRendererParams: { suppressCount: false },
-        }}
+      {/* Toolbar */}
+      <Stack direction="row" spacing={1}>
+        <Button
+          variant="contained"
+          size="small"
+          startIcon={<AddIcon />}
+          onClick={openAddDrawer}
+        >
+          Add
+        </Button>
+        <Button
+          variant="outlined"
+          size="small"
+          startIcon={<EditIcon />}
+          disabled={!canUpdate}
+          onClick={openUpdateDrawer}
+        >
+          Update
+        </Button>
+        <Button
+          variant="outlined"
+          size="small"
+          color="error"
+          startIcon={<DeleteIcon />}
+          disabled={!canDelete}
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </Stack>
+
+      {/* Grid */}
+      <Box sx={{ flex: 1, overflow: "hidden" }}>
+        <AgGrid<Product>
+          columnDefs={columnDefs}
+          rowData={data ?? null}
+          loading={isPending}
+          pagination={true}
+          pageSize={20}
+          pageSizeOptions={[10, 20, 50, 100]}
+          additionalModules={ADDITIONAL_MODULES}
+          noRowsMessage="No products found"
+          getRowId={params => String(params.data.id)}
+          groupDisplayType="singleColumn"
+          autoGroupColumnDef={{
+            headerName: "Category",
+            minWidth: 180,
+            cellRendererParams: { suppressCount: false },
+          }}
+          rowSelection={{
+            mode: "multiRow",
+            checkboxes: true,
+            headerCheckbox: true,
+            enableClickSelection: false,
+          }}
+          onSelectionChanged={handleSelectionChanged}
+        />
+      </Box>
+
+      {/* Drawer */}
+      <ProductDrawer
+        open={isDrawerOpen}
+        mode={drawerMode}
+        editingProduct={editingProduct}
+        onClose={closeDrawer}
       />
     </Box>
   );

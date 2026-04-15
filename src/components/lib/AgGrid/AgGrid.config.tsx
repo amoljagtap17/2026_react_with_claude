@@ -6,6 +6,7 @@ import {
   NumberEditorModule,
   NumberFilterModule,
   PaginationModule,
+  RowSelectionModule,
   TextEditorModule,
   TextFilterModule,
   ValidationModule,
@@ -42,6 +43,7 @@ export const BASE_MODULES: Module[] = [
   NumberFilterModule,
   ValidationModule,
   CellStyleModule,
+  RowSelectionModule,
 ];
 
 /**
