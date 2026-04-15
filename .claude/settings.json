@@ -7,8 +7,22 @@
     "NPM_CONFIG_UPDATE_NOTIFIER": "false",
     "VITE_CJS_IGNORE_WARNING": "true"
   },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd C:/2026_pocs/2026_react_with_claude && npx tsc --noEmit"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
+      "Bash(npx tsc --noEmit)",
       "Bash(npm run lint)",
       "Bash(npm run prettier:check)",
       "Bash(npm run prettier:write)",
