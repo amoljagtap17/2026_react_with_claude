@@ -100,6 +100,8 @@ export function CustomHeader({
       <ColumnMenu
         gridApi={api}
         anchorEl={menuAnchor}
+        colId={column.getColId()}
+        currentSort={sort}
         onClose={() => setMenuAnchor(null)}
       />
     </Box>
