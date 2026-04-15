@@ -29,37 +29,25 @@ export function AdminGrid() {
       {
         field: "id",
         headerName: "ID",
-        width: 72,
         editable: false,
-        filter: "agNumberColumnFilter",
-        sortable: true,
-        pinned: "left",
       },
       {
         field: "name",
         headerName: "Name",
-        flex: 2,
-        minWidth: 160,
         editable: true,
-        filter: "agTextColumnFilter",
       },
       {
         field: "category",
         headerName: "Category",
-        minWidth: 160,
         editable: true,
-        filter: "agTextColumnFilter",
         cellEditor: "agSelectCellEditor",
         cellEditorParams: { values: PRODUCT_CATEGORIES },
-        // Enable row grouping when RowGroupingModule (enterprise) is provided
         enableRowGroup: true,
       },
       {
         field: "price",
         headerName: "Price",
-        width: 110,
         editable: true,
-        filter: "agNumberColumnFilter",
         cellEditor: "agNumberCellEditor",
         cellEditorParams: { min: 0, precision: 2 },
         valueFormatter: priceFormatter,
@@ -67,16 +55,13 @@ export function AdminGrid() {
       {
         field: "stock",
         headerName: "Stock",
-        width: 100,
         editable: true,
-        filter: "agNumberColumnFilter",
         cellEditor: "agNumberCellEditor",
         cellEditorParams: { min: 0 },
       },
       {
         field: "condition",
         headerName: "Condition",
-        minWidth: 130,
         editable: true,
         cellEditor: "agSelectCellEditor",
         cellEditorParams: { values: PRODUCT_CONDITIONS },
@@ -84,22 +69,18 @@ export function AdminGrid() {
       {
         field: "isFeatured",
         headerName: "Featured",
-        width: 100,
         editable: false,
         valueFormatter: boolFormatter,
       },
       {
         field: "description",
         headerName: "Description",
-        flex: 3,
-        minWidth: 200,
         editable: true,
         tooltipField: "description",
       },
       {
         field: "createdAt",
         headerName: "Created At",
-        minWidth: 130,
         editable: false,
         valueFormatter: dateFormatter,
         sort: "desc",
@@ -109,12 +90,6 @@ export function AdminGrid() {
   );
 
   return (
-    /*
-     * height: 100% fills the AppLayout <main> area (flex: 1 1 0).
-     * padding + display:flex+column lets AgGrid fill the padded space.
-     * overflow: hidden prevents this container from scrolling;
-     * the AG Grid viewport handles row virtualisation internally.
-     */
     <Box
       sx={{
         height: "100%",
@@ -133,7 +108,6 @@ export function AdminGrid() {
         pageSizeOptions={[10, 20, 50, 100]}
         additionalModules={ADDITIONAL_MODULES}
         noRowsMessage="No products found"
-        rowGroupPanelShow="never"
         getRowId={params => String(params.data.id)}
       />
     </Box>

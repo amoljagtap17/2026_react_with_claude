@@ -16,7 +16,7 @@ import {
 export const defaultColDef: ColDef = {
   flex: 1,
   minWidth: 100,
-  filter: true,
+  filter: false,
   sortable: true,
   resizable: true,
   editable: false,

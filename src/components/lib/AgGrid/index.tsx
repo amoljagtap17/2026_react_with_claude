@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import type {
-  GridApi,
   GridReadyEvent,
   Module,
   PaginationChangedEvent,
@@ -12,7 +11,7 @@ import { BASE_MODULES, baseGridOptions, defaultColDef } from "./AgGrid.config";
 import { AgGridNoRowsOverlay } from "./AgGridNoRowsOverlay";
 import type { AgGridPaginationState } from "./AgGridPagination";
 import { AgGridPagination } from "./AgGridPagination";
-import { ColumnMenu } from "./columnMenu/ColumnMenu";
+import { CustomHeader } from "./columnMenu/CustomHeader";
 
 export interface AgGridProps<TData = unknown> extends Omit<
   AgGridReactProps<TData>,
@@ -47,12 +46,6 @@ export interface AgGridProps<TData = unknown> extends Omit<
    * @default "No rows to display"
    */
   noRowsMessage?: string;
-
-  /**
-   * Show the column settings menu (visibility toggles + sort controls).
-   * @default true
-   */
-  showColumnMenu?: boolean;
 }
 
 const INITIAL_PAGINATION_STATE: AgGridPaginationState = {
@@ -64,8 +57,8 @@ const INITIAL_PAGINATION_STATE: AgGridPaginationState = {
 
 /**
  * Reusable AG Grid wrapper with:
- * - MUI no-rows overlay
- * - MUI column settings menu (visibility + sort)
+ * - MUI no-rows overlay (plain text)
+ * - Custom column header: sort indicator + MoreVert column-settings menu
  * - MUI custom pagination panel
  * - Cell editing via TextEditorModule / NumberEditorModule
  * - Row grouping support via additionalModules prop (requires ag-grid-enterprise)
@@ -75,7 +68,6 @@ export function AgGrid<TData = unknown>({
   pageSize = 20,
   pageSizeOptions = [10, 20, 50, 100],
   noRowsMessage,
-  showColumnMenu = true,
   pagination = false,
   defaultColDef: userDefaultColDef,
   onGridReady: userOnGridReady,
@@ -83,7 +75,6 @@ export function AgGrid<TData = unknown>({
   ...restProps
 }: AgGridProps<TData>) {
   const gridRef = useRef<AgGridReact<TData>>(null);
-  const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const [paginationState, setPaginationState] = useState<AgGridPaginationState>(
     { ...INITIAL_PAGINATION_STATE, pageSize }
   );
@@ -94,13 +85,16 @@ export function AgGrid<TData = unknown>({
   );
 
   const mergedDefaultColDef = useMemo(
-    () => ({ ...defaultColDef, ...userDefaultColDef }),
+    () => ({
+      ...defaultColDef,
+      headerComponent: CustomHeader,
+      ...userDefaultColDef,
+    }),
     [userDefaultColDef]
   );
 
   const handleGridReady = useCallback(
     (event: GridReadyEvent<TData>) => {
-      setGridApi(event.api);
       userOnGridReady?.(event);
     },
     [userOnGridReady]
@@ -138,23 +132,6 @@ export function AgGrid<TData = unknown>({
           width: "100%",
         }}
       >
-        {/* Column settings toolbar */}
-        {showColumnMenu && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              px: 0.5,
-              py: 0.25,
-              borderBottom: "1px solid",
-              borderColor: "divider",
-            }}
-          >
-            <ColumnMenu gridApi={gridApi} />
-          </Box>
-        )}
-
         {/* Grid area */}
         <Box sx={{ flex: 1, minHeight: 0 }}>
           <AgGridReact<TData>

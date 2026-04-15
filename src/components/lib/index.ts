@@ -6,3 +6,4 @@ export type {
 } from "./AgGrid/AgGridPagination";
 export type { ColumnMenuProps } from "./AgGrid/columnMenu/ColumnMenu";
 export type { ColumnMenuItemProps } from "./AgGrid/columnMenu/ColumnMenuItem";
+export { CustomHeader } from "./AgGrid/columnMenu/CustomHeader";

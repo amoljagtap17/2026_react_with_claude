@@ -1,4 +1,11 @@
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { NavLink } from "react-router";
 
 const NAV_LINKS = [
@@ -35,22 +42,24 @@ function ButtonLink({
 export function Header() {
   return (
     <AppBar position="sticky" elevation={0}>
-      <Toolbar>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, letterSpacing: "0.02em" }}
-        >
-          Product Catalog
-        </Typography>
-        <Box sx={{ display: "flex", gap: 1 }}>
-          {NAV_LINKS.map(({ label, to }) => (
-            <ButtonLink key={to} to={to}>
-              {label}
-            </ButtonLink>
-          ))}
-        </Box>
-      </Toolbar>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, letterSpacing: "0.02em" }}
+          >
+            Product Catalog
+          </Typography>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {NAV_LINKS.map(({ label, to }) => (
+              <ButtonLink key={to} to={to}>
+                {label}
+              </ButtonLink>
+            ))}
+          </Box>
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 }
