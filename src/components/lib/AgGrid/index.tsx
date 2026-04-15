@@ -1,5 +1,10 @@
 import Box from "@mui/material/Box";
-import type { GridApi, GridReadyEvent, Module } from "ag-grid-community";
+import type {
+  GridApi,
+  GridReadyEvent,
+  Module,
+  PaginationChangedEvent,
+} from "ag-grid-community";
 import type { AgGridReactProps } from "ag-grid-react";
 import { AgGridProvider, AgGridReact } from "ag-grid-react";
 import { useCallback, useMemo, useRef, useState } from "react";
@@ -102,9 +107,7 @@ export function AgGrid<TData = unknown>({
   );
 
   const handlePaginationChanged = useCallback(
-    (
-      event: Parameters<NonNullable<AgGridReactProps["onPaginationChanged"]>>[0]
-    ) => {
+    (event: PaginationChangedEvent<TData>) => {
       const api = event.api;
       setPaginationState({
         currentPage: api.paginationGetCurrentPage() + 1,

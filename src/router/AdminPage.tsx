@@ -1,3 +1,5 @@
+import { AdminGrid } from "@features/admin";
+
 export function AdminPage() {
-  return <div>Admin</div>;
+  return <AdminGrid />;
 }
