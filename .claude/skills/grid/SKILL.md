@@ -1,8 +1,14 @@
+---
+name: grid
+description: Scaffolds the 2-file <Name>Grid/ folder (columns + component) wrapping the project's AgGrid component. Accepts rowData as a prop — API query hooks, Zustand store entries, and drawer/form integration are out of scope.
+---
+
 # Grid Skill
 
 Scaffolds a `<Name>Grid/` component folder that wraps the project's reusable `AgGrid` component from `@components/lib`.
 
 **NOT in scope:** API query hooks, Zustand store entries, drawer/form integration. Those are done separately.
+The grid component always accepts `rowData` as a prop — the caller is responsible for fetching data and passing it in.
 
 ---
 
@@ -50,14 +56,7 @@ Read `examples.md` (in this skill folder) for the complete AdminGrid reference i
 
 Read `reference.md` (in this skill folder) for the full `AgGrid` props interface, column definition patterns, and formatting/editing recipes.
 
-### 4. Check for an existing data hook
-
-Look for a query hook in `src/features/<feature>/api/use<Entity>.ts` or `use<Entity>s.ts`.
-
-- If found → import and use it for `rowData`
-- If not found → leave `rowData` as `[]` with a `// TODO: wire up data hook` comment
-
-### 5. Create `<Name>GridColumns.ts`
+### 4. Create `<Name>GridColumns.ts`
 
 Define `export const <NAME>_GRID_COLUMNS: ColDef<T>[] = [...]`.
 
@@ -67,20 +66,24 @@ Define `export const <NAME>_GRID_COLUMNS: ColDef<T>[] = [...]`.
 - For editable grids: set `editable: (params) => !!params.node.isSelected()` per column
 - For enum columns: use `cellEditor: "agSelectCellEditor"` with `cellEditorParams: { values: [...] }`
 
-### 6. Create `index.tsx`
+### 5. Create `index.tsx`
 
 The grid component renders the toolbar (if requested) + `<AgGrid>`. It:
 
 - Imports `AgGrid` from `@components/lib`
 - Imports `<NAME>_GRID_COLUMNS` from `./<Name>GridColumns`
-- Accepts `rowData` as a prop (or pulls it from a query hook if one was found)
+- Always accepts `rowData` as a **prop** — never imports a query hook
 - Passes `additionalModules` for enterprise features (row grouping requires `RowGroupingModule`, `TreeDataModule`)
 - Manages selected rows in local state if `row-selection` or `multi-row-selection` is requested
 
 **Minimal grid (no toolbar, no selection):**
 
 ```tsx
-export function <Name>Grid() {
+interface <Name>GridProps {
+  rowData: EntityType[] | null;
+}
+
+export function <Name>Grid({ rowData }: <Name>GridProps) {
   return (
     <AgGrid<EntityType>
       columnDefs={<NAME>_GRID_COLUMNS}
@@ -137,6 +140,6 @@ const ADDITIONAL_MODULES = [RowGroupingModule, TreeDataModule];
 </Box>
 ```
 
-### 7. Verify
+### 6. Verify
 
 Run `npx tsc --noEmit`. Fix any type errors before finishing.

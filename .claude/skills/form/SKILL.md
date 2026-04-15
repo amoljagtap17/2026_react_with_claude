@@ -1,3 +1,8 @@
+---
+name: form
+description: Scaffolds the 5-file <Name>Form/ folder (schema, form, fields, action buttons, barrel) using React Hook Form + Zod + MUI. API integration and drawer/page wiring are out of scope.
+---
+
 # Form Skill
 
 Scaffolds the 4 form files + `index.ts` barrel for a new form component following the project's established React Hook Form + Zod + MUI pattern.
