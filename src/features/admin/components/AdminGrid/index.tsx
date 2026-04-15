@@ -8,9 +8,14 @@ import {
 import Box from "@mui/material/Box";
 import type { ColDef, ValueFormatterParams } from "ag-grid-community";
 import { SelectEditorModule } from "ag-grid-community";
+import { RowGroupingModule, TreeDataModule } from "ag-grid-enterprise";
 import { useMemo } from "react";
 
-const ADDITIONAL_MODULES = [SelectEditorModule];
+const ADDITIONAL_MODULES = [
+  SelectEditorModule,
+  RowGroupingModule,
+  TreeDataModule,
+];
 
 const priceFormatter = (params: ValueFormatterParams<Product, number>) =>
   params.value != null ? `$${params.value.toFixed(2)}` : "";
@@ -42,7 +47,8 @@ export function AdminGrid() {
         editable: true,
         cellEditor: "agSelectCellEditor",
         cellEditorParams: { values: PRODUCT_CATEGORIES },
-        enableRowGroup: true,
+        rowGroup: true,
+        hide: true,
       },
       {
         field: "price",
@@ -109,6 +115,12 @@ export function AdminGrid() {
         additionalModules={ADDITIONAL_MODULES}
         noRowsMessage="No products found"
         getRowId={params => String(params.data.id)}
+        groupDisplayType="singleColumn"
+        autoGroupColumnDef={{
+          headerName: "Category",
+          minWidth: 180,
+          cellRendererParams: { suppressCount: false },
+        }}
       />
     </Box>
   );

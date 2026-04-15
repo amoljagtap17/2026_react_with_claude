@@ -1,5 +1,6 @@
 import type { ColDef, GridOptions, Module } from "ag-grid-community";
 import {
+  CellStyleModule,
   ClientSideRowModelModule,
   ColumnApiModule,
   NumberEditorModule,
@@ -7,6 +8,7 @@ import {
   PaginationModule,
   TextEditorModule,
   TextFilterModule,
+  ValidationModule,
 } from "ag-grid-community";
 
 /**
@@ -38,6 +40,8 @@ export const BASE_MODULES: Module[] = [
   TextFilterModule,
   NumberEditorModule,
   NumberFilterModule,
+  ValidationModule,
+  CellStyleModule,
 ];
 
 /**

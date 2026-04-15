@@ -71,9 +71,9 @@ function defaultGetMainMenuItems(
   params: GetMainMenuItemsParams
 ): (string | MenuItemDef)[] {
   const { column, api } = params;
-  const colId = column.getColId();
+  const colId = column!.getColId();
   const currentSort =
-    (column.getSort() as "asc" | "desc" | null | undefined) ?? null;
+    (column!.getSort() as "asc" | "desc" | null | undefined) ?? null;
 
   const sortAsc: MenuItemDef = {
     name: "Sort Ascending",

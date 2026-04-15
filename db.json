@@ -1,4 +1,335 @@
 {
   "$schema": "./node_modules/json-server/schema.json",
-  "products": []
+  "products": [
+    {
+      "id": 1,
+      "name": "4K OLED Smart TV 55\"",
+      "category": "Electronics",
+      "price": 1299.99,
+      "stock": 14,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "55-inch 4K OLED panel with built-in streaming apps and voice control.",
+      "createdAt": "2026-01-03T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Wireless Noise-Cancelling Headphones",
+      "category": "Electronics",
+      "price": 349.99,
+      "stock": 42,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "Over-ear headphones with 30-hour battery life and adaptive noise cancellation.",
+      "createdAt": "2026-01-05T11:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Mechanical Gaming Keyboard",
+      "category": "Electronics",
+      "price": 129.99,
+      "stock": 78,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "TKL mechanical keyboard with RGB backlighting and Cherry MX Red switches.",
+      "createdAt": "2026-01-08T14:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "Mirrorless Camera Body",
+      "category": "Electronics",
+      "price": 1899.0,
+      "stock": 7,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "24 MP full-frame mirrorless with in-body stabilisation and 4K 60fps video.",
+      "createdAt": "2026-01-10T08:45:00.000Z"
+    },
+    {
+      "id": 5,
+      "name": "Portable Bluetooth Speaker",
+      "category": "Electronics",
+      "price": 89.99,
+      "stock": 135,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "IP67 waterproof speaker with 360° sound and 20-hour playtime.",
+      "createdAt": "2026-01-12T10:15:00.000Z"
+    },
+    {
+      "id": 6,
+      "name": "USB-C Laptop (Refurb)",
+      "category": "Electronics",
+      "price": 699.0,
+      "stock": 5,
+      "condition": "refurbished",
+      "isFeatured": false,
+      "description": "Certified refurbished 14-inch ultrabook, 16 GB RAM, 512 GB SSD.",
+      "createdAt": "2026-01-15T16:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "name": "Smart Home Hub",
+      "category": "Electronics",
+      "price": 59.99,
+      "stock": 63,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "Central hub supporting Zigbee, Z-Wave, and Matter protocols.",
+      "createdAt": "2026-01-18T12:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "name": "Wireless Ergonomic Mouse",
+      "category": "Electronics",
+      "price": 69.99,
+      "stock": 94,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "Vertical ergonomic mouse with silent clicks and 90-day battery life.",
+      "createdAt": "2026-01-20T09:30:00.000Z"
+    },
+    {
+      "id": 9,
+      "name": "Action Camera 4K",
+      "category": "Electronics",
+      "price": 249.0,
+      "stock": 31,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "4K 120fps action cam with HyperSmooth stabilisation and live streaming.",
+      "createdAt": "2026-01-22T13:45:00.000Z"
+    },
+    {
+      "id": 10,
+      "name": "Tablet 10.9\" (Used)",
+      "category": "Electronics",
+      "price": 319.0,
+      "stock": 3,
+      "condition": "used",
+      "isFeatured": false,
+      "description": "10.9-inch tablet, 64 GB, minor screen scratches, all functions perfect.",
+      "createdAt": "2026-01-25T15:00:00.000Z"
+    },
+    {
+      "id": 11,
+      "name": "Men's Slim-Fit Chinos",
+      "category": "Clothing",
+      "price": 59.99,
+      "stock": 120,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "Stretch cotton chinos available in navy, khaki, and olive.",
+      "createdAt": "2026-01-04T10:00:00.000Z"
+    },
+    {
+      "id": 12,
+      "name": "Women's Running Jacket",
+      "category": "Clothing",
+      "price": 89.99,
+      "stock": 55,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "Lightweight wind-resistant running jacket with reflective details.",
+      "createdAt": "2026-01-06T11:00:00.000Z"
+    },
+    {
+      "id": 13,
+      "name": "Unisex Graphic Hoodie",
+      "category": "Clothing",
+      "price": 44.99,
+      "stock": 200,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "500 g fleece hoodie with kangaroo pocket, pre-shrunk cotton blend.",
+      "createdAt": "2026-01-09T09:00:00.000Z"
+    },
+    {
+      "id": 14,
+      "name": "Leather Oxford Shoes",
+      "category": "Clothing",
+      "price": 149.99,
+      "stock": 28,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "Full-grain leather oxford shoes with rubber sole, sizes 7–13.",
+      "createdAt": "2026-01-11T14:30:00.000Z"
+    },
+    {
+      "id": 15,
+      "name": "Merino Wool Sweater",
+      "category": "Clothing",
+      "price": 119.0,
+      "stock": 40,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "100% merino crewneck, machine-washable, available in 8 colours.",
+      "createdAt": "2026-01-13T10:00:00.000Z"
+    },
+    {
+      "id": 16,
+      "name": "Vintage Denim Jacket (Used)",
+      "category": "Clothing",
+      "price": 35.0,
+      "stock": 2,
+      "condition": "used",
+      "isFeatured": false,
+      "description": "Size M vintage wash denim jacket, minor fading, no tears.",
+      "createdAt": "2026-01-16T12:00:00.000Z"
+    },
+    {
+      "id": 17,
+      "name": "Athletic Compression Leggings",
+      "category": "Clothing",
+      "price": 54.99,
+      "stock": 85,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "4-way stretch high-waist leggings with side pocket, UPF 50+.",
+      "createdAt": "2026-01-19T09:00:00.000Z"
+    },
+    {
+      "id": 18,
+      "name": "Down Puffer Vest",
+      "category": "Clothing",
+      "price": 79.99,
+      "stock": 33,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "700-fill power duck down vest, packable, water-repellent shell.",
+      "createdAt": "2026-01-21T11:15:00.000Z"
+    },
+    {
+      "id": 19,
+      "name": "Formal Dress Shirt",
+      "category": "Clothing",
+      "price": 49.99,
+      "stock": 60,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "Non-iron poplin dress shirt, slim fit, available in white and light blue.",
+      "createdAt": "2026-01-24T08:00:00.000Z"
+    },
+    {
+      "id": 20,
+      "name": "Trail Running Shoes",
+      "category": "Clothing",
+      "price": 109.99,
+      "stock": 47,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "Vibram-soled trail shoes with rock plate and Gore-Tex membrane.",
+      "createdAt": "2026-01-26T13:00:00.000Z"
+    },
+    {
+      "id": 21,
+      "name": "Ceramic Non-Stick Cookware Set",
+      "category": "Home & Garden",
+      "price": 199.99,
+      "stock": 22,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "10-piece ceramic-coated set, PFAS-free, oven-safe to 450°F.",
+      "createdAt": "2026-01-07T10:00:00.000Z"
+    },
+    {
+      "id": 22,
+      "name": "Robot Vacuum & Mop Combo",
+      "category": "Home & Garden",
+      "price": 449.0,
+      "stock": 9,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "LiDAR-navigating robot with auto-empty base and carpet detection.",
+      "createdAt": "2026-01-09T12:00:00.000Z"
+    },
+    {
+      "id": 23,
+      "name": "Raised Garden Bed Kit",
+      "category": "Home & Garden",
+      "price": 89.99,
+      "stock": 18,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "Cedar wood raised bed, 4×8 ft, easy snap-together assembly.",
+      "createdAt": "2026-01-11T09:30:00.000Z"
+    },
+    {
+      "id": 24,
+      "name": "Standing Desk (Sit-Stand)",
+      "category": "Home & Garden",
+      "price": 499.0,
+      "stock": 6,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "Electric height-adjustable desk, 60×30 in top, memory presets.",
+      "createdAt": "2026-01-14T14:00:00.000Z"
+    },
+    {
+      "id": 25,
+      "name": "Air Purifier HEPA H13",
+      "category": "Home & Garden",
+      "price": 159.99,
+      "stock": 37,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "Covers 500 sq ft, true HEPA H13 + activated carbon filter, quiet mode.",
+      "createdAt": "2026-01-16T11:00:00.000Z"
+    },
+    {
+      "id": 26,
+      "name": "Cordless Drill Set (Refurb)",
+      "category": "Home & Garden",
+      "price": 74.99,
+      "stock": 4,
+      "condition": "refurbished",
+      "isFeatured": false,
+      "description": "18V drill with 2 batteries, charger, and 40-piece bit set.",
+      "createdAt": "2026-01-18T10:00:00.000Z"
+    },
+    {
+      "id": 27,
+      "name": "Outdoor Solar String Lights",
+      "category": "Home & Garden",
+      "price": 34.99,
+      "stock": 110,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "50 ft, 100 LED solar-powered string lights, IP65 waterproof.",
+      "createdAt": "2026-01-20T15:00:00.000Z"
+    },
+    {
+      "id": 28,
+      "name": "Memory Foam Mattress Topper",
+      "category": "Home & Garden",
+      "price": 129.0,
+      "stock": 25,
+      "condition": "new",
+      "isFeatured": false,
+      "description": "3-inch cooling gel memory foam topper, queen size, CertiPUR-US.",
+      "createdAt": "2026-01-22T09:00:00.000Z"
+    },
+    {
+      "id": 29,
+      "name": "Cast Iron Dutch Oven 5.5 qt",
+      "category": "Home & Garden",
+      "price": 79.99,
+      "stock": 41,
+      "condition": "new",
+      "isFeatured": true,
+      "description": "Enamelled cast iron, works on all hobs including induction.",
+      "createdAt": "2026-01-24T12:00:00.000Z"
+    },
+    {
+      "id": 30,
+      "name": "Drip Coffee Maker (Used)",
+      "category": "Home & Garden",
+      "price": 29.0,
+      "stock": 1,
+      "condition": "used",
+      "isFeatured": false,
+      "description": "12-cup drip machine, programmable timer, lightly used, cleaned.",
+      "createdAt": "2026-01-26T10:30:00.000Z"
+    }
+  ]
 }
