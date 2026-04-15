@@ -1,7 +1,7 @@
-import { AppLayout } from "@components/layout/AppLayout";
-import { AdminPage } from "@features/admin";
-import { DashboardPage } from "@features/dashboard";
+import { AppLayout } from "@components/layout";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { AdminPage } from "./AdminPage";
+import { DashboardPage } from "./DashboardPage";
 
 export function AppRouter() {
   return (

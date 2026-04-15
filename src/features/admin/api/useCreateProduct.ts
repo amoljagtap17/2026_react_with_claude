@@ -8,11 +8,13 @@ async function createProduct(input: CreateProductInput): Promise<Product> {
     ...input,
     createdAt: new Date().toISOString(),
   });
+
   return data;
 }
 
 export function useCreateProduct() {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
