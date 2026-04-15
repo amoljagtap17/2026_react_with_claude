@@ -1,6 +1,9 @@
 import Box from "@mui/material/Box";
 import type {
+  ColDef,
+  GetMainMenuItemsParams,
   GridReadyEvent,
+  MenuItemDef,
   Module,
   PaginationChangedEvent,
 } from "ag-grid-community";
@@ -11,6 +14,7 @@ import { BASE_MODULES, baseGridOptions, defaultColDef } from "./AgGrid.config";
 import { AgGridNoRowsOverlay } from "./AgGridNoRowsOverlay";
 import type { AgGridPaginationState } from "./AgGridPagination";
 import { AgGridPagination } from "./AgGridPagination";
+import { ColumnMenuItem } from "./columnMenu/ColumnMenuItem";
 import { CustomHeader } from "./columnMenu/CustomHeader";
 
 export interface AgGridProps<TData = unknown> extends Omit<
@@ -56,12 +60,82 @@ const INITIAL_PAGINATION_STATE: AgGridPaginationState = {
 };
 
 /**
+ * Default column menu: Sort Ascending, Sort Descending, separator, then a
+ * "Columns" submenu where each entry renders via ColumnMenuItem (checkbox +
+ * label) to toggle column visibility.
+ *
+ * Requires enterprise ColumnMenuModule to actually fire at runtime; wired here
+ * so the grid is ready when enterprise is added.
+ */
+function defaultGetMainMenuItems(
+  params: GetMainMenuItemsParams
+): (string | MenuItemDef)[] {
+  const { column, api } = params;
+  const colId = column.getColId();
+  const currentSort =
+    (column.getSort() as "asc" | "desc" | null | undefined) ?? null;
+
+  const sortAsc: MenuItemDef = {
+    name: "Sort Ascending",
+    disabled: currentSort === "asc",
+    action: () =>
+      api.applyColumnState({
+        state: [{ colId, sort: "asc" }],
+        defaultState: { sort: null },
+      }),
+  };
+
+  const sortDesc: MenuItemDef = {
+    name: "Sort Descending",
+    disabled: currentSort === "desc",
+    action: () =>
+      api.applyColumnState({
+        state: [{ colId, sort: "desc" }],
+        defaultState: { sort: null },
+      }),
+  };
+
+  const columnSubMenuItems: MenuItemDef[] = (api.getColumns() ?? []).map(
+    col => {
+      const def = col.getColDef() as ColDef;
+      const id = col.getColId();
+      const headerName = def.headerName ?? def.field ?? id;
+      const visible = col.isVisible();
+      return {
+        name: headerName,
+        menuItem: ColumnMenuItem,
+        menuItemParams: {
+          colId: id,
+          headerName,
+          visible,
+          onVisibilityChange: (changedColId: string, isVisible: boolean) => {
+            api.applyColumnState({
+              state: [{ colId: changedColId, hide: !isVisible }],
+            });
+          },
+        },
+        suppressCloseOnSelect: true,
+      };
+    }
+  );
+
+  const columnsMenu: MenuItemDef = {
+    name: "Columns",
+    subMenu: columnSubMenuItems,
+  };
+
+  return [sortAsc, sortDesc, "separator", columnsMenu];
+}
+
+/**
  * Reusable AG Grid wrapper with:
  * - MUI no-rows overlay (plain text)
  * - Custom column header: sort indicator + MoreVert column-settings menu
  * - MUI custom pagination panel
  * - Cell editing via TextEditorModule / NumberEditorModule
  * - Row grouping support via additionalModules prop (requires ag-grid-enterprise)
+ * - getMainMenuItems wired with sort + column-visibility defaults
+ *   (fires when enterprise ColumnMenuModule is present)
  */
 export function AgGrid<TData = unknown>({
   additionalModules = [],
@@ -72,6 +146,7 @@ export function AgGrid<TData = unknown>({
   defaultColDef: userDefaultColDef,
   onGridReady: userOnGridReady,
   onPaginationChanged: userOnPaginationChanged,
+  getMainMenuItems: userGetMainMenuItems,
   ...restProps
 }: AgGridProps<TData>) {
   const gridRef = useRef<AgGridReact<TData>>(null);
@@ -146,6 +221,7 @@ export function AgGrid<TData = unknown>({
             onPaginationChanged={
               pagination ? handlePaginationChanged : userOnPaginationChanged
             }
+            getMainMenuItems={userGetMainMenuItems ?? defaultGetMainMenuItems}
             {...baseGridOptions}
             {...restProps}
           />
