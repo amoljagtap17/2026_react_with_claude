@@ -1,4 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import Box from "@mui/material/Box";
+import type { SxProps, Theme } from "@mui/material/styles";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import type { ProductFormValues } from "./ProductFormSchema";
@@ -8,12 +10,14 @@ interface ProductFormProps {
   defaultValues?: Partial<ProductFormValues>;
   onSubmit: (values: ProductFormValues) => void;
   children: ReactNode;
+  sx?: SxProps<Theme>;
 }
 
 export function ProductForm({
   defaultValues,
   onSubmit,
   children,
+  sx,
 }: ProductFormProps) {
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
@@ -22,9 +26,14 @@ export function ProductForm({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+      <Box
+        component="form"
+        onSubmit={methods.handleSubmit(onSubmit)}
+        noValidate
+        sx={sx}
+      >
         {children}
-      </form>
+      </Box>
     </FormProvider>
   );
 }

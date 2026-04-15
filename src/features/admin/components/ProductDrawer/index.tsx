@@ -1,7 +1,9 @@
 import type { Product } from "@features/products";
+import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useCreateProduct } from "../../api/useCreateProduct";
 import { useUpdateProduct } from "../../api/useUpdateProduct";
@@ -58,26 +60,59 @@ export function ProductDrawer({
       open={open}
       anchor="right"
       onClose={onClose}
-      slotProps={{ paper: { sx: { width: 420 } } }}
+      elevation={0}
+      slotProps={{
+        paper: {
+          sx: {
+            width: { xs: "100%", sm: 560 },
+            display: "flex",
+            flexDirection: "column",
+          },
+        },
+      }}
     >
       {/* Header */}
-      <Box sx={{ px: 3, py: 2 }}>
+      <Box
+        sx={{
+          px: 3,
+          py: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexShrink: 0,
+        }}
+      >
         <Typography variant="h6">{title}</Typography>
+        <IconButton onClick={onClose} size="small" aria-label="Close drawer">
+          <CloseIcon fontSize="small" />
+        </IconButton>
       </Box>
 
       <Divider />
 
-      {/* Form — key forces remount when switching product or mode */}
-      <Box sx={{ px: 3, py: 3, flex: 1, overflow: "auto" }}>
-        <ProductForm
-          key={mode === "update" ? (editingProduct?.id ?? "update") : "add"}
-          defaultValues={defaultValues}
-          onSubmit={handleSubmit}
-        >
+      {/* Form stretches to fill remaining height */}
+      <ProductForm
+        key={mode === "update" ? (editingProduct?.id ?? "update") : "add"}
+        defaultValues={defaultValues}
+        onSubmit={handleSubmit}
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        {/* Scrollable body */}
+        <Box sx={{ flex: 1, overflow: "auto", px: 3, py: 3 }}>
           <ProductFormFields />
+        </Box>
+
+        {/* Sticky footer */}
+        <Divider />
+        <Box sx={{ px: 3, py: 2, flexShrink: 0 }}>
           <ProductActionButtons onCancel={onClose} isPending={isPending} />
-        </ProductForm>
-      </Box>
+        </Box>
+      </ProductForm>
     </Drawer>
   );
 }

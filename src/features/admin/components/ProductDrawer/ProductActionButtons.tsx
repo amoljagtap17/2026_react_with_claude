@@ -15,7 +15,7 @@ export function ProductActionButtons({
   const isDisabled = formState.isSubmitting || isPending;
 
   return (
-    <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ pt: 3 }}>
+    <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end" }}>
       <Button variant="outlined" onClick={onCancel} disabled={isDisabled}>
         Cancel
       </Button>
