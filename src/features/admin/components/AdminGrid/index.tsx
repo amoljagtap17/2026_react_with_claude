@@ -52,7 +52,12 @@ export function AdminGrid() {
 
   const { mutate: deleteProduct } = useDeleteProduct();
 
-  const editingProduct = drawerMode === "update" ? selectedRows[0] : undefined;
+  // Always resolve from the live query data so the drawer shows the
+  // latest values after a mutation + refetch, not a stale selection snapshot.
+  const editingProduct =
+    drawerMode === "update" && selectedRows[0]
+      ? data?.find(p => p.id === selectedRows[0].id)
+      : undefined;
 
   const columnDefs = useMemo<ColDef<Product>[]>(
     () => [

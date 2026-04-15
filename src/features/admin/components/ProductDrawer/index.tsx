@@ -59,7 +59,10 @@ export function ProductDrawer({
     <Drawer
       open={open}
       anchor="right"
-      onClose={onClose}
+      onClose={(_event, reason) => {
+        if (reason === "backdropClick") return;
+        onClose();
+      }}
       elevation={0}
       slotProps={{
         paper: {
