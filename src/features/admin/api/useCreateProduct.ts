@@ -4,7 +4,10 @@ import axiosInstance from "@lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 async function createProduct(input: CreateProductInput): Promise<Product> {
-  const { data } = await axiosInstance.post<Product>("/products", input);
+  const { data } = await axiosInstance.post<Product>("/products", {
+    ...input,
+    createdAt: new Date().toISOString(),
+  });
   return data;
 }
 

@@ -6,13 +6,35 @@ const NAV_LINKS = [
   { label: "Admin", to: "/admin" },
 ];
 
+function ButtonLink({
+  to,
+  children,
+}: {
+  to: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Button
+      key={to}
+      color="inherit"
+      component={NavLink}
+      to={to}
+      sx={{
+        px: 2,
+        "&.active": {
+          backgroundColor: "rgba(255, 255, 255, 0.12)",
+          fontWeight: 600,
+        },
+      }}
+    >
+      {children}
+    </Button>
+  );
+}
+
 export function Header() {
   return (
-    <AppBar
-      position="sticky"
-      elevation={0}
-      sx={{ borderBottom: "1px solid", borderColor: "divider" }}
-    >
+    <AppBar position="sticky" elevation={0}>
       <Toolbar>
         <Typography
           variant="h6"
@@ -23,21 +45,9 @@ export function Header() {
         </Typography>
         <Box sx={{ display: "flex", gap: 1 }}>
           {NAV_LINKS.map(({ label, to }) => (
-            <Button
-              key={to}
-              color="inherit"
-              component={NavLink}
-              to={to}
-              sx={{
-                px: 2,
-                "&.active": {
-                  backgroundColor: "rgba(255, 255, 255, 0.12)",
-                  fontWeight: 600,
-                },
-              }}
-            >
+            <ButtonLink key={to} to={to}>
               {label}
-            </Button>
+            </ButtonLink>
           ))}
         </Box>
       </Toolbar>
