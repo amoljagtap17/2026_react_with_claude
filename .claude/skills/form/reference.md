@@ -110,6 +110,7 @@ import { FormCheckbox } from "@components/form";
 | --------------------------------------- | ------------------------------------------------------------------------------- |
 | `z.string().min(1, "…")`                | `<FormInput name label required />`                                             |
 | `z.string().optional()`                 | `<FormInput name label />` or with `multiline rows`                             |
+| `z.string().email("…")`                 | `<FormInput name label required />`                                             |
 | `z.enum(CONST)`                         | `<FormSelect name label options={CONST} required />`                            |
 | `z.boolean()`                           | `<FormCheckbox name label />`                                                   |
 | `z.coerce.number().positive()`          | `<FormInput type="number" slotProps={{ htmlInput: { min: 0, step: 0.01 } }} />` |
@@ -130,7 +131,132 @@ status: z.enum(STATUSES, { error: "Please select a status" }),
 
 // Error messages go in the schema, not in the component
 name: z.string().min(1, "Name is required"),
+
+// Email
+email: z.string().email("Must be a valid email address"),
+
+// Optional with constraints
+bio: z.string().max(500, "Cannot exceed 500 characters").optional(),
 ```
+
+**Validation chaining for custom rules:**
+
+| Rule         | Zod chain                      | Example                                                   |
+| ------------ | ------------------------------ | --------------------------------------------------------- |
+| Min length   | `.min(n, "message")`           | `z.string().min(2, "At least 2 characters")`              |
+| Max length   | `.max(n, "message")`           | `z.string().max(100, "Cannot exceed 100 chars")`          |
+| Pattern      | `.regex(/pattern/, "message")` | `z.string().regex(/^[A-Z]/, "Must start with uppercase")` |
+| Email        | `.email("message")`            | `z.string().email("Invalid email")`                       |
+| Min (number) | `.min(n, "message")`           | `z.coerce.number().min(0, "Must be at least 0")`          |
+| Max (number) | `.max(n, "message")`           | `z.coerce.number().max(1000, "Cannot exceed 1000")`       |
+| Positive     | `.positive("message")`         | `z.coerce.number().positive("Must be positive")`          |
+| Integer      | `.int("message")`              | `z.coerce.number().int("Must be a whole number")`         |
+
+---
+
+## Layout Patterns
+
+### Default: Single column
+
+Wrap all fields in a `<Box>` flex column with `gap: 2`:
+
+```tsx
+<Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+  <FormInput name="name" label="Name" required />
+  <FormInput name="email" label="Email" required />
+</Box>
+```
+
+### Multi-column with sections
+
+Use MUI `Grid2` inside named sections. Each section gets a title + divider:
+
+```tsx
+import Grid from "@mui/material/Grid2";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+
+<Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+  {/* Section with 2-column grid */}
+  <Box>
+    <Typography variant="subtitle2" sx={{ mb: 1, color: "text.secondary" }}>
+      Customer Information
+    </Typography>
+    <Divider sx={{ mb: 2 }} />
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <FormInput name="firstName" label="First Name" required />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <FormInput name="lastName" label="Last Name" required />
+      </Grid>
+      {/* Full-width field within a 2-col section */}
+      <Grid size={{ xs: 12 }}>
+        <FormInput name="email" label="Email" required />
+      </Grid>
+    </Grid>
+  </Box>
+
+  {/* Single-column section — no Grid needed */}
+  <Box>
+    <Typography variant="subtitle2" sx={{ mb: 1, color: "text.secondary" }}>
+      Notes
+    </Typography>
+    <Divider sx={{ mb: 2 }} />
+    <FormInput name="notes" label="Notes" multiline rows={3} />
+  </Box>
+</Box>;
+```
+
+**Column assignment rules:**
+
+- `columns: 1` → each field is `<Grid size={{ xs: 12 }}>` (or no Grid at all)
+- `columns: 2` → each field is `<Grid size={{ xs: 12, sm: 6 }}>` by default; a field that would be alone on its row gets `<Grid size={{ xs: 12 }}>` to avoid a half-empty row
+
+---
+
+## Conditional Fields
+
+Use `useWatch` at the top of `<Name>FormFields` to read a trigger field's value, then conditionally render the dependent field.
+
+```tsx
+import { useWatch } from "react-hook-form";
+
+export function OrderFormFields() {
+  const deliveryType = useWatch({ name: "deliveryType" });
+
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <FormSelect
+        name="deliveryType"
+        label="Delivery Type"
+        options={DELIVERY_TYPE_OPTIONS}
+        required
+      />
+
+      {/* Only shown when deliveryType !== "pickup" */}
+      {deliveryType !== "pickup" && (
+        <FormInput name="deliveryDate" label="Delivery Date" required />
+      )}
+    </Box>
+  );
+}
+```
+
+**Operator → JS expression mapping:**
+
+| Operator | Expression                         |
+| -------- | ---------------------------------- |
+| `eq`     | `watchedValue === condition.value` |
+| `notEq`  | `watchedValue !== condition.value` |
+| `gt`     | `watchedValue > condition.value`   |
+| `gte`    | `watchedValue >= condition.value`  |
+| `lt`     | `watchedValue < condition.value`   |
+| `lte`    | `watchedValue <= condition.value`  |
+
+**Multiple conditions on different fields:** add a separate `useWatch` call per trigger field.
+
+**Important:** When a conditional field is hidden, its value remains in the form state. The schema should mark it optional or the caller should strip hidden fields before submitting if needed.
 
 ---
 

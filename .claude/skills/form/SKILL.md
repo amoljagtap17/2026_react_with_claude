@@ -48,55 +48,64 @@ Read `examples.md` (in this skill folder) for the complete ProductDrawer referen
 
 ### 3. Read component API
 
-Read `reference.md` (in this skill folder) for the full API of `FormInput`, `FormSelect`, and `FormCheckbox`, and the field-to-component mapping table.
+Read `reference.md` (in this skill folder) for the full API of `FormInput`, `FormSelect`, and `FormCheckbox`, and the field-to-component mapping table. Also read the layout, conditional, and validation sections.
 
-### 4. Check for an existing Zod schema
+### 4. Create `<Name>FormSchema.ts`
 
-Look for a file at `src/features/<feature>/schemas/<entity>.schema.ts`.
-
-- If a `create<Entity>Schema` exists → re-export and alias it in `<Name>FormSchema.ts` rather than duplicating
-- If none exists → define a new `z.object({...})` schema from scratch
-
-### 5. Create `<Name>FormSchema.ts`
+Always define the Zod schema from scratch — do not look for or reuse an existing schema.
 
 ```ts
-// If reusing an existing schema:
-import { create<Entity>Schema } from "@features/<feature>";
-import type { Create<Entity>Input } from "@features/<feature>";
-
-export const <name>FormSchema = create<Entity>Schema;
-export type <Name>FormValues = Create<Entity>Input;
-
-// If defining from scratch:
 import { z } from "zod";
 
 export const <name>FormSchema = z.object({
   // use z.string().min(1, "Required") for required text
+  // use z.string().optional() for optional text / textarea
+  // use z.string().email("Must be a valid email") for email fields
   // use z.coerce.number().positive() for price-like numbers
-  // use z.coerce.number().int().nonnegative() for count-like numbers
+  // use z.coerce.number().int().nonnegative() for count-like integers
   // use z.enum(CONST, { error: "..." }) for string unions
   // use z.boolean() for checkboxes
-  // use z.string().optional() for optional text
 });
 export type <Name>FormValues = z.infer<typeof <name>FormSchema>;
 
 // Defaults — every key must have a value (no undefined)
 export const <NAME>_FORM_DEFAULTS: <Name>FormValues = {
-  // string: ""
-  // number: 0
+  // string / textarea / email: ""
+  // number / integer: 0
   // boolean: false
   // enum: first value of the const array
-  // optional string: ""
 };
 ```
 
-### 6. Create `<Name>FormFields.tsx`
+**For enum fields:** define the const array at the top of the schema file and export it:
+
+```ts
+export const CATEGORY_OPTIONS = [
+  "Electronics",
+  "Clothing",
+  "Home & Garden",
+] as const;
+```
+
+**Validation chaining** — apply these Zod refinements when the field definition specifies them:
+
+| Rule           | Zod chain                      |
+| -------------- | ------------------------------ |
+| `minLength: n` | `.min(n, "message")`           |
+| `maxLength: n` | `.max(n, "message")`           |
+| `pattern`      | `.regex(/pattern/, "message")` |
+| `min: n`       | `.min(n, "message")` (numbers) |
+| `max: n`       | `.max(n, "message")` (numbers) |
+| email          | `z.string().email("message")`  |
+
+### 5. Create `<Name>FormFields.tsx`
 
 Consult `reference.md` for the field → component mapping.
 
+**Default layout (no sections):**
+
 ```tsx
 import { FormCheckbox, FormInput, FormSelect } from "@components/form";
-// import enum const arrays from the feature schema if needed
 import Box from "@mui/material/Box";
 
 export function <Name>FormFields() {
@@ -108,7 +117,54 @@ export function <Name>FormFields() {
 }
 ```
 
-### 7. Create `<Name>Form.tsx`
+**Multi-column layout with sections** — use MUI `Grid2` when a section has `columns: 2`:
+
+```tsx
+import Grid from "@mui/material/Grid2";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+
+// Inside the return:
+<Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+  <Box>
+    <Typography variant="subtitle2" sx={{ mb: 1, color: "text.secondary" }}>
+      Section Title
+    </Typography>
+    <Divider sx={{ mb: 2 }} />
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <FormInput name="firstName" label="First Name" required />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <FormInput name="lastName" label="Last Name" required />
+      </Grid>
+      {/* A field that spans the full width in a 2-col section: size={{ xs: 12 }} */}
+    </Grid>
+  </Box>
+</Box>;
+```
+
+**Conditional fields** — use `useWatch` at the top of `<Name>FormFields` for any field with a display condition:
+
+```tsx
+import { useWatch } from "react-hook-form";
+
+export function <Name>FormFields() {
+  // One useWatch call per conditional trigger field
+  const deliveryType = useWatch({ name: "deliveryType" });
+
+  return (
+    // ...
+    {deliveryType !== "pickup" && (
+      <FormInput name="deliveryDate" label="Delivery Date" required />
+    )}
+  );
+}
+```
+
+Supported operators: `eq` (===), `notEq` (!==), `gt` (>), `gte` (>=), `lt` (<), `lte` (<=).
+
+### 6. Create `<Name>Form.tsx`
 
 Use `<Box component="form">` (not `<form>`) — this enables the MUI `sx` prop, which callers use to make the form a flex-column inside a Drawer or Page.
 
@@ -144,7 +200,7 @@ export function <Name>Form({ defaultValues, onSubmit, children, sx }: <Name>Form
 }
 ```
 
-### 8. Create `<Name>ActionButtons.tsx`
+### 7. Create `<Name>ActionButtons.tsx`
 
 ```tsx
 import Button from "@mui/material/Button";
@@ -173,13 +229,13 @@ export function <Name>ActionButtons({ onCancel, isPending = false }: <Name>Actio
 }
 ```
 
-### 9. Create `index.ts`
+### 8. Create `index.ts`
 
 ```ts
 export { <Name>Form } from "./<Name>Form";
 export type { <Name>FormValues } from "./<Name>FormSchema";
 ```
 
-### 10. Verify
+### 9. Verify
 
 Run `npx tsc --noEmit`. Fix any type errors before finishing.
